@@ -114,7 +114,7 @@ Creating noderedintro_chrome ... done
 
 ### ノードの配置
 
-![bg right:45% w:130mm](images/shibainu-flow-1.png)
+![bg right:45% w:130mm](images/shibainu-flow-replacement.png)
 
 下記のノードをおおまかに配置
 
@@ -130,7 +130,7 @@ Creating noderedintro_chrome ... done
 
 ### http request ノードの設定
 
-![bg right:50% h:140mm](images/shibainu-flow-http-request.png)
+![bg right:40% h:140mm](images/shibainu-flow-http-request.png)
 
 - メソッド: `GET`
 - URL: `http://shibe.online/api/shibes?count=3&urls=true&httpsUrls=true`
@@ -141,7 +141,7 @@ Creating noderedintro_chrome ... done
 
 ### change ノードの設定
 
-![bg right:50% h:140mm](images/shibainu-flow-change.png)
+![bg right:40% h:140mm](images/shibainu-flow-change.png)
 
 - ルール
     - `値の代入`: `msg.` `payload`
@@ -166,7 +166,7 @@ payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d15
 
 ![bg right:50% h:140mm](images/shibainu-sample.jpg)
 
-1. ノードを下記のように接続する
+1. ノードを下記のように接続する  
 ![](images/shibainu-flow-connection.png)
 1. ![](images/deploy-button.png)
 1. ![](images/inject-button.png)
