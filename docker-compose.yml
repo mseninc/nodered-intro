@@ -1,0 +1,74 @@
+version: '3.1'
+
+services:
+
+  nodered:
+    container_name: noderedintro_nodered
+    image: nodered/node-red
+    restart: always
+    user: "root:dialout" # npm パッケージのインストール時に permission denied が発生するため
+    ports:
+      - 1880:1880
+    # env_file:
+    #   - ./docker/nodered/.env
+    volumes:
+      - ./docker/nodered/data:/data
+      - ./.data:/mnt/data
+
+  # https://hub.docker.com/_/mariadb
+  db:
+    container_name: noderedintro_db
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_DATABASE: common
+      MYSQL_USER: admin
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-defaultPass}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-defaultPass}
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 3306:3306
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/database/schema:/docker-entrypoint-initdb.d
+      - ./docker/database/my.cnf:/etc/mysql/conf.d/my.cnf
+      - db-data:/var/lib/mysql
+
+  adminer:
+    container_name: noderedintro_adminer
+    image: adminer:4.8.0 # 4.8.1 is with PHP 8
+    restart: always
+    volumes:
+      - ./docker/adminer/php-error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    environment:
+      ADMINER_DESIGN: flat
+    ports:
+      - 8080:8080
+
+  chrome:
+    container_name: noderedintro_chrome
+    image: selenium/node-chrome:4.0.0-20211025
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_GRID_URL=http://selenium:4444
+    ports:
+      - "5900:5900"
+      - "7900:7900"
+
+  selenium-hub:
+    container_name: noderedintro_selenium-hub
+    image: selenium/hub:4.0.0-20211025
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+volumes:
+
+  db-data:
+    driver: local
