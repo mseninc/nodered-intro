@@ -40,6 +40,8 @@ style: |
         font-size: 14pt;
         content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
     }
+    li > img { vertical-align: bottom; }
+
 ---
 <!-- _class: title -->
 
@@ -112,8 +114,61 @@ Creating noderedintro_chrome ... done
 
 ### ノードの配置
 
+![bg right:45% w:130mm](images/shibainu-flow-1.png)
+
+下記のノードをおおまかに配置
+
 - `inject` ノード
 - `http request` ノード
 - `change` ノード
 - `debug` ノード
 - `image` ノード
+
+ノードをダブルクリックしてプロパティを編集
+
+---
+
+### http request ノードの設定
+
+![bg right:50% h:140mm](images/shibainu-flow-http-request.png)
+
+- メソッド: `GET`
+- URL: `http://shibe.online/api/shibes?count=3&urls=true&httpsUrls=true`
+- 出力形式: `JSONオブジェクト`
+- 名前: 任意
+
+---
+
+### change ノードの設定
+
+![bg right:50% h:140mm](images/shibainu-flow-change.png)
+
+- ルール
+    - `値の代入`: `msg.` `payload`
+    - `対象の値`: `msg.` `payload.0`
+
+イメージ 
+```
+payload: [
+    "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d1504.jpg",
+    "https://cdn.shibe.online/shibes/516edce738058b2c7423b32b22ce267b2cbc4011.jpg",
+    "https://cdn.shibe.online/shibes/c9bd274729c07e6aa56ef83778c515414791349a.jpg"
+]
+```
+👇 `msg.payload.0` の値を `msg.payload` に代入
+```
+payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d1504.jpg"
+```
+
+---
+
+### ノードの接続
+
+![bg right:50% h:140mm](images/shibainu-sample.jpg)
+
+1. ノードを下記のように接続する
+![](images/shibainu-flow-connection.png)
+1. ![](images/deploy-button.png)
+1. ![](images/inject-button.png)
+1. 🐶
+
