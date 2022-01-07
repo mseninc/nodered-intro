@@ -1,7 +1,6 @@
 ---
 marp: true
-# theme: base
-footer: 2022.01.07 MSEN 勉強会
+footer: 2022.01.08 MSEN 勉強会
 style: |
     h1, h2, h3, h4, h5, header, footer {
         color: dimgrey;
@@ -89,7 +88,19 @@ Creating noderedintro_chrome ... done
 
 ---
 
-## 柴犬の画像を表示してみる
+## 簡単な用語説明
+
+- **ノード** : フローを構成する処理の 1 要素
+- **フロー** :  
+複数のノードから構成された処理の流れ。 Node-RED では 1 フロー 1 タブとなる
+- **パレット**: 画面左側にあるノードのツールボックス的なもの
+- **メッセージ `msg`**:  
+フローを流れていく一塊のデータ。フローはこのメッセージ単位で処理される
+- **ペイロード `msg.payload`**: メッセージの中でもノードで処理される対象となる主のデータ
+
+---
+
+## ① 柴犬の画像を表示してみる
 
 [柴犬 API につないで画像を表示する仕組みを試して学ぼう 前編 | enebular blog](https://blog.enebular.com/api/shiba-inu-api-1/)
 
@@ -144,8 +155,9 @@ Creating noderedintro_chrome ... done
 ![bg right:40% h:140mm](images/shibainu-flow-change.png)
 
 - ルール
-    - `値の代入`: `msg.` `payload`
-    - `対象の値`: `msg.` `payload.0`
+    - タイプ: `値の代入`
+    - (代入先): `msg.` `payload`
+    - 対象の値: `msg.` `payload.0`
 
 イメージ 
 ```
@@ -172,3 +184,98 @@ payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d15
 1. ![](images/inject-button.png)
 1. 🐶
 
+---
+
+## ② 現在日時を返す API の作成
+
+`http://localhost:1880/now` にアクセスすると現在日時を返す API を作ってみる
+
+![](images/api-now.png)
+
+### 処理の流れ
+
+1. `GET` `/now` を受け付ける
+1. 現在日時を本文 (`payload`) に設定
+1. レスポンスを返す
+
+---
+
+### ノードの配置
+
+下記のノードをおおまかに配置して接続
+
+![](images/api-now-nodes.png)
+
+- `http in` ノード
+- `change` ノード
+- `http response` ノード
+
+---
+
+### http in ノードの設定
+
+![bg right:40% w:120mm](images/api-now-http-in.png)
+
+- メソッド: `GET`
+- URL: `/now`
+- 名前: `/now`
+
+---
+
+### change ノードの設定
+
+![bg right:40% w:120mm](images/api-now-change.png)
+
+- ルール
+    - タイプ: `値の代入`
+    - (代入先): `msg.` `payload`
+    - 対象の値: `JSONata式` `$now('[Y0001]-[M01]-[D01] [H01]:[m01]:[s01].[f01]', '+0900')	`
+
+---
+
+### 動作確認
+
+1. ![](images/deploy-button.png)
+1. Chrome で `http://localhost:1880/now` にアクセス
+
+![](images/api-now.png)
+
+表示されない場合は `debug` ノードを配置して途中の値がどうなっているか覗いてみよう
+
+![](images/debug-whole-msg.png)
+
+---
+
+## ③ 柴犬画像をプロキシする API をつくってみよう
+
+`http://localhost:1880/shibainu` にアクセスすると **柴犬画像** を返す API を作ってみる
+
+![](images/api-shibainu.png)
+
+---
+
+### 処理の流れ
+
+1. `GET` `/shibainu` を受け付ける
+1. 柴犬 API で柴犬画像 URL を取得
+1. 最初の柴犬画像 URL を URL に設定
+1. 柴犬画像を取得
+1. レスポンスを返す
+
+### ヒント
+
+- `http request` ノードは事前に `msg.url` を設定しておくとその URL にリクエストを送る
+- `http response` では `Content-Type` ヘッダーを `image/jpeg` に設定
+- `http request` ノードで画像をリクエストするときは応答が画像データになるので出力形式を「バイナリバッファ」にする
+
+---
+
+### 使用ノード
+
+- `http in` ノード
+- `http request` ノード
+- `change` ノード
+- `http request` ノード
+- `http response` ノード
+- `image` ノード (デバッグ用)
+- `debug` ノード (デバッグ用)
