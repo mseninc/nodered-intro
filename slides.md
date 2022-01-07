@@ -88,15 +88,22 @@ Creating noderedintro_chrome ... done
 
 ---
 
-## 簡単な用語説明
+## 簡単な用語説明📝
 
 - **ノード** : フローを構成する処理の 1 要素
-- **フロー** :  
-複数のノードから構成された処理の流れ。 Node-RED では 1 フロー 1 タブとなる
-- **パレット**: 画面左側にあるノードのツールボックス的なもの
-- **メッセージ `msg`**:  
-フローを流れていく一塊のデータ。フローはこのメッセージ単位で処理される
-- **ペイロード `msg.payload`**: メッセージの中でもノードで処理される対象となる主のデータ
+- **フロー** : 複数のノードから構成された処理の流れ。 1 フロー ＝ 1 タブ
+- **パレット** : 画面左側にあるノードのツールボックス的なもの
+- **メッセージ `msg`** : フローを流れる一塊のデータ。フローはこのメッセージ単位で実行
+- **ペイロード `msg.payload`** : メッセージのうち、ノードで処理対象となる主のデータ
+- **デプロイ** : 作成したフローを実際に使えるようにする処理
+- **JSON** : 下記のような形式の文字列あるいはオブジェクト
+```json
+{
+    "topic": "これがトピック",
+    "payload": "これがペイロード",
+    "hairetsu": [ "これが配列の要素1", "これが配列の要素2" ]
+}
+```
 
 ---
 
@@ -123,7 +130,7 @@ Creating noderedintro_chrome ... done
 
 ---
 
-### ノードの配置
+### ノードの配置🍀
 
 ![bg right:45% w:130mm](images/shibainu-flow-replacement.png)
 
@@ -192,15 +199,15 @@ payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d15
 
 ![](images/api-now.png)
 
-### 処理の流れ
+### 処理の流れ🔀
 
-1. `GET` `/now` を受け付ける
+1. `GET` `/now` をリッスン
 1. 現在日時を本文 (`payload`) に設定
 1. レスポンスを返す
 
 ---
 
-### ノードの配置
+### ノードの配置🍀
 
 下記のノードをおおまかに配置して接続
 
@@ -240,7 +247,7 @@ payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d15
 
 ![](images/api-now.png)
 
-表示されない場合は `debug` ノードを配置して途中の値がどうなっているか覗いてみよう
+表示されない場合は `debug` ノードを配置して途中の値がどうなっているか覗いてみよう🔍
 
 ![](images/debug-whole-msg.png)
 
@@ -254,23 +261,23 @@ payload: "https://cdn.shibe.online/shibes/156e259299fcf8c648c4f6c8ce094ca1668d15
 
 ---
 
-### 処理の流れ
+### 処理の流れ🔀
 
-1. `GET` `/shibainu` を受け付ける
-1. 柴犬 API で柴犬画像 URL を取得
-1. 最初の柴犬画像 URL を URL に設定
+1. `GET` `/shibainu` をリッスン
+1. 柴犬 API で「柴犬画像 URL」を取得
+1. 最初の「柴犬画像 URL」を `msg.url` に設定
 1. 柴犬画像を取得
 1. レスポンスを返す
 
-### ヒント
+### ヒント📝
 
-- `http request` ノードは事前に `msg.url` を設定しておくとその URL にリクエストを送る
-- `http response` では `Content-Type` ヘッダーを `image/jpeg` に設定
+- `http request` ノードは事前に `msg.url` を設定すると、その URL にリクエストを送れる
 - `http request` ノードで画像をリクエストするときは応答が画像データになるので出力形式を「バイナリバッファ」にする
+- `http response` では `Content-Type` ヘッダーを `image/jpeg` に設定
 
 ---
 
-### 使用ノード
+### 使用ノード🍀
 
 - `http in` ノード
 - `http request` ノード
