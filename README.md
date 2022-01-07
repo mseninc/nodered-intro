@@ -1,3 +1,3 @@
 # Node-RED intro
 
-[Slide](./index.md)
+[Slides](./slides.md)

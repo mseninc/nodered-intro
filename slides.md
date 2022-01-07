@@ -59,9 +59,9 @@ style: |
 
 ---
 
-## 早速起動してみる
+## Docker で起動
 
-clone して `docker-compose up -d`
+WSL の Ubuntu 上で clone して `docker-compose up -d`
 
 ```sh
 $ cd
