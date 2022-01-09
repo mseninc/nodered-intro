@@ -1,6 +1,6 @@
 ---
 marp: true
-footer: 2022.01.08 MSEN 勉強会
+footer: 2022.01.09 MSEN 勉強会
 style: |
     h1, h2, h3, h4, h5, header, footer {
         color: dimgrey;
